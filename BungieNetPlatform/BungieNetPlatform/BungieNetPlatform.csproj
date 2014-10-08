@@ -51,6 +51,10 @@
     <Compile Include="BungieNet.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="CurrentUser.cs" />
+    <Compile Include="Destiny\Account.cs" />
+    <Compile Include="Destiny\Character.cs" />
+    <Compile Include="Destiny\DestinyPlayer.cs" />
+    <Compile Include="Destiny\Inventory.cs" />
     <Compile Include="Enums\Acl.cs" />
     <Compile Include="Enums\ActivityAggregationType.cs" />
     <Compile Include="Enums\ActivityItemOrigin.cs" />
@@ -113,6 +117,7 @@
     <Compile Include="Enums\TierType.cs" />
     <Compile Include="Enums\UnitType.cs" />
     <Compile Include="Enums\VendorItemStatus.cs" />
+    <Compile Include="Responses\PlayerResponse.cs" />
     <Compile Include="Responses\FollowersResponse.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="GroupDetail.cs" />

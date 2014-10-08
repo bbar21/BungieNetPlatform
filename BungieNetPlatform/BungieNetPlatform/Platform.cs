@@ -75,6 +75,24 @@ namespace BungieNetPlatform {
 
 		}
 
+        private async Task<JObject> NoAuthRequest(string path)
+        {
+
+            HttpResponseMessage msg;
+            string str;
+
+            using (HttpClientHandler handler = new HttpClientHandler())
+            using (HttpClient client = new HttpClient(handler))
+            {
+                handler.UseCookies = true;
+                msg = await client.GetAsync(BungieNet.PlatformPath + path);
+                str = await msg.Content.ReadAsStringAsync();
+
+                return JObject.Parse(str);
+
+            }
+        }
+
 
 
 
@@ -320,11 +338,18 @@ namespace BungieNetPlatform {
 
 		}
 
+        public async Task<PlayerResponse> SearchDestinyPlayer(int membershipType, string userName)
+	    {
+
+            JObject j = await NoAuthRequest(
+                     string.Format("/Destiny/SearchDestinyPlayer/{0}/{1}/", membershipType, userName)
+                 );
+
+            return new PlayerResponse(j);
+	    }
 
 
-
-
-		//public async Task<JObject> LikePostAsync(RequestingUser u, int postId) {
+	    //public async Task<JObject> LikePostAsync(RequestingUser u, int postId) {
 			
 		//	string path = string.Format("/Forum/RatePost/{0}/100/", postId);
 		//	JObject j = await AuthRequest(path, WebRequestMethods.Http.Post, new StringContent("null"), true);

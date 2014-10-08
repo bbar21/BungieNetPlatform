@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BungieNetPlatform", "Bungie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "Extensions\Extensions.csproj", "{57A77442-2563-44BC-826C-259A95FF6C5B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BungieNetPlatform.Tests", "BungieNetPlatform.Tests\BungieNetPlatform.Tests.csproj", "{7EDD6008-A43C-482C-9D9B-8824C719E1C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{57A77442-2563-44BC-826C-259A95FF6C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57A77442-2563-44BC-826C-259A95FF6C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57A77442-2563-44BC-826C-259A95FF6C5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EDD6008-A43C-482C-9D9B-8824C719E1C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EDD6008-A43C-482C-9D9B-8824C719E1C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EDD6008-A43C-482C-9D9B-8824C719E1C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EDD6008-A43C-482C-9D9B-8824C719E1C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

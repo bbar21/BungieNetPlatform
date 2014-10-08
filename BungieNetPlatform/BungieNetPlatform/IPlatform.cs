@@ -100,5 +100,10 @@ namespace BungieNetPlatform {
 			int memberId
 			);
 
+        [OperationContract]
+        Task<PlayerResponse> SearchDestinyPlayer(
+            int membershipType, string userName
+            );
+
 	}
 }
