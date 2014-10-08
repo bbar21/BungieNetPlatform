@@ -53,8 +53,9 @@
     <Compile Include="CurrentUser.cs" />
     <Compile Include="Destiny\Account.cs" />
     <Compile Include="Destiny\Character.cs" />
-    <Compile Include="Destiny\DestinyPlayer.cs" />
+    <Compile Include="Destiny\Player.cs" />
     <Compile Include="Destiny\Inventory.cs" />
+    <Compile Include="Destiny\Item.cs" />
     <Compile Include="Enums\Acl.cs" />
     <Compile Include="Enums\ActivityAggregationType.cs" />
     <Compile Include="Enums\ActivityItemOrigin.cs" />

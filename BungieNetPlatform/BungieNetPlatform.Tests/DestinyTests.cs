@@ -21,7 +21,7 @@ namespace BungieNetPlatform.Tests
         }
 
         [TestMethod]
-        public void GetDestinyPlayer()
+        public void CanSearchDestinyPlayer()
         {
             Task<PlayerResponse> response = platform.SearchDestinyPlayer(2, "GameCompanion");
             var message = response.Result.Message;
