@@ -8,7 +8,8 @@ namespace Extensions {
 
 		public PipeConnection(string endpoint) {
 
-			NetNamedPipeBinding binding = new NetNamedPipeBinding();
+            NetHttpBinding binding = new NetHttpBinding();
+			//NetNamedPipeBinding binding = new NetNamedPipeBinding();
 			binding.CloseTimeout = TimeSpan.MaxValue;
 			binding.OpenTimeout = TimeSpan.MaxValue;
 			binding.ReceiveTimeout = TimeSpan.MaxValue;

@@ -5,17 +5,17 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.ServiceModel;
 using System.Text.RegularExpressions;
 using BungieNetPlatform;
 using Newtonsoft.Json;
 using BungieNetPlatform.Responses;
 using BungieNetPlatform.Enums;
+using MoreLinq;
 
 namespace BungieNetPlatform {
 
-	[ServiceBehavior(IncludeExceptionDetailInFaults = true)]
+	//[ServiceBehavior(IncludeExceptionDetailInFaults = true)]
 	public class Platform : IPlatform {
 
 		private async Task<JObject> AuthRequest(string path, string method, HttpContent data, RequestingUser u) {
@@ -23,23 +23,25 @@ namespace BungieNetPlatform {
 			using(HttpClientHandler handler = new HttpClientHandler())
 			using(HttpClient client = new HttpClient(handler)) {
 
+                Uri uri = new Uri(BungieNet.BaseUri, path);
 				HttpResponseMessage msg = null;
 				string str;
 
 				if(u != null) {
 					handler.UseCookies = true;
 					handler.CookieContainer = new CookieContainer();
-					u.Cookies.ToList().ForEach(c => handler.CookieContainer.Add(c));
+                    u.Cookies.ToList().ForEach(c => handler.CookieContainer.Add(uri, c));
 					client.DefaultRequestHeaders.Add("x-csrf", u.CsrfToken);
 				}
 				else {
 					handler.UseCookies = false;
 				}
 
-				if(method.ToUpper() == WebRequestMethods.Http.Get.ToUpper()) {
+				if(method.ToUpper() == HttpMethod.Get.Method.ToUpper()) {
 					msg = await client.GetAsync(BungieNet.PlatformPath + path);
 				}
-				else if(method.ToUpper() == WebRequestMethods.Http.Post.ToUpper()) {
+                else if (method.ToUpper() == HttpMethod.Post.Method.ToUpper())
+                {
 					msg  = await client.PostAsync(BungieNet.PlatformPath + path, data);
 				}
 
@@ -53,26 +55,25 @@ namespace BungieNetPlatform {
 
 		private async Task<JObject> NoAuthRequest(string path, RequestingUser u) {
 
+            Uri uri = new Uri(BungieNet.BaseUri, path);
 			HttpResponseMessage msg;
 			string str;
 
 			using(HttpClientHandler handler = new HttpClientHandler())
 			using(HttpClient client = new HttpClient(handler)) {
 
-				if(u != null) {
+                if(u != null) {
 					handler.CookieContainer = new CookieContainer();
-					u.Cookies.ToList().ForEach(c => handler.CookieContainer.Add(c));
+					u.Cookies.ToList().ForEach(c => handler.CookieContainer.Add(uri, c));
 				}
 
 				handler.UseCookies = true;
 
-				msg = await client.GetAsync(BungieNet.PlatformPath + path);
+				msg = await client.GetAsync(uri);
 				str = await msg.Content.ReadAsStringAsync();
 
 				return JObject.Parse(str);
-
 			}
-
 		}
 
         private async Task<JObject> NoAuthRequest(string path)
@@ -117,7 +118,7 @@ namespace BungieNetPlatform {
 					(int)sort,
 					(int)date,
 					(int)category,
-					tags != null ? HttpUtility.UrlEncode(string.Join(",", tags)) : ""
+					tags != null ? WebUtility.UrlEncode(string.Join(",", tags)) : ""
 				);
 
 				JObject j = await NoAuthRequest(path, u);
@@ -135,7 +136,7 @@ namespace BungieNetPlatform {
 				if(u != null) {
 					j = await AuthRequest(
 						string.Format("/Group/{0}/", groupId),
-						WebRequestMethods.Http.Get,
+						HttpMethod.Get.Method,
 						null,
 						u
 					);
@@ -159,7 +160,7 @@ namespace BungieNetPlatform {
 
 				JObject j = await AuthRequest(
 					string.Format("/Message/GetConversationThreadV3/{0}/{1}/", conversationId, page),
-					WebRequestMethods.Http.Get,
+					HttpMethod.Get.Method,
 					null,
 					u
 				);
@@ -194,7 +195,7 @@ namespace BungieNetPlatform {
 
 				JObject j = await AuthRequest(
 					"/Forum/CreatePost/",
-					WebRequestMethods.Http.Post,
+					HttpMethod.Post.Method,
 					new StringContent(o.ToString()),
 					u
 				);
@@ -226,7 +227,7 @@ namespace BungieNetPlatform {
 
 				JObject j = await AuthRequest(
 					"/Forum/CreatePost/",
-					WebRequestMethods.Http.Post,
+					HttpMethod.Post.Method,
 					new StringContent(o.ToString()),
 					u
 				);
@@ -238,14 +239,14 @@ namespace BungieNetPlatform {
 		public async Task<GetCountsResponse> GetCounts(
 			RequestingUser u
 			) {
-				JObject j = await AuthRequest("/User/GetCounts/", WebRequestMethods.Http.Get, null, u);
+				JObject j = await AuthRequest("/User/GetCounts/", HttpMethod.Get.Method, null, u);
 				return new GetCountsResponse(j);
 		}
 
 		public async Task<GetNotificationsResponse> CheckNotifications(
 			RequestingUser u
 			) {
-				JObject j = await AuthRequest("/Notification/GetRecent/", WebRequestMethods.Http.Get, null, u);
+				JObject j = await AuthRequest("/Notification/GetRecent/", HttpMethod.Get.Method, null, u);
 				return new GetNotificationsResponse(j);
 		}
 
@@ -263,7 +264,7 @@ namespace BungieNetPlatform {
 
 				JObject j = await AuthRequest(
 					"/Message/SaveMessageV3/",
-					WebRequestMethods.Http.Post,
+					HttpMethod.Post.Method,
 					new StringContent(post.ToString()),
 					u
 				);
@@ -278,7 +279,7 @@ namespace BungieNetPlatform {
 
 				JObject j = await AuthRequest(
 					"/User/GetBungieNetUser/",
-					WebRequestMethods.Http.Get,
+					HttpMethod.Get.Method,
 					null,
 					u
 				);
@@ -294,7 +295,7 @@ namespace BungieNetPlatform {
 
 				JObject j = await AuthRequest(
 					string.Format("/Message/GetConversationsV4/{0}/", page),
-					WebRequestMethods.Http.Get,
+					HttpMethod.Get.Method,
 					null,
 					u
 				);
@@ -352,7 +353,7 @@ namespace BungieNetPlatform {
 	    //public async Task<JObject> LikePostAsync(RequestingUser u, int postId) {
 			
 		//	string path = string.Format("/Forum/RatePost/{0}/100/", postId);
-		//	JObject j = await AuthRequest(path, WebRequestMethods.Http.Post, new StringContent("null"), true);
+		//	JObject j = await AuthRequest(path, HttpMethod.Post.Method, new StringContent("null"), true);
 		//	CheckForExceptions(j);
 		//	return j;
 
@@ -361,7 +362,7 @@ namespace BungieNetPlatform {
 		//public async Task<JObject> VoteAsync(RequestingUser u, int postId, int optionIndex) {
 
 		//	string path = string.Format("/Forum/Poll/Vote/{0}/{1}/", postId, optionIndex);
-		//	JObject j = await AuthRequest(path, WebRequestMethods.Http.Post, new StringContent("null"), true);
+		//	JObject j = await AuthRequest(path, HttpMethod.Post.Method, new StringContent("null"), true);
 		//	CheckForExceptions(j);
 		//	return j;
 
@@ -379,7 +380,7 @@ namespace BungieNetPlatform {
 
 		//	JObject j = await AuthRequest(
 		//		"/Message/SaveMessageV2/",
-		//		WebRequestMethods.Http.Post,
+		//		HttpMethod.Post.Method,
 		//		new StringContent(o.ToString()),
 		//		true
 		//	);

@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Runtime.Serialization;
-using System.Web;
 
 namespace BungieNetPlatform {
 
@@ -36,7 +36,7 @@ namespace BungieNetPlatform {
 		[DataMember]
 		public string Subject {
 			get {
-				return RawSubject ?? HttpUtility.HtmlDecode(RawSubject);
+				return RawSubject ?? WebUtility.HtmlDecode(RawSubject);
 			}
 			private set {
 				//Do nothing, only here for serialization
